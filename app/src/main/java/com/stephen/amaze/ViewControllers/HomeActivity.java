@@ -1,4 +1,4 @@
-package com.stephen.amaze;
+package com.stephen.amaze.ViewControllers;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.stephen.amaze.R;
 
 public class HomeActivity extends AppCompatActivity {
 
