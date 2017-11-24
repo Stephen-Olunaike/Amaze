@@ -1,5 +1,6 @@
 package com.stephen.amaze.ViewControllers;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,13 +12,14 @@ import android.view.MenuItem;
 
 import com.stephen.amaze.R;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements GridFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -27,7 +29,16 @@ public class HomeActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
+
+        showGridFragment();
+    }
+
+    private void showGridFragment() {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        GridFragment fragment = GridFragment.newInstance(null, null);
+        transaction.add(R.id.home_container, fragment).commit();
     }
 
     @Override
