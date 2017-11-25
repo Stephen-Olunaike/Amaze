@@ -21,6 +21,7 @@ import java.util.Arrays;
 
 import static com.stephen.amaze.Models.MazeSquare.END;
 import static com.stephen.amaze.Models.MazeSquare.PATH;
+import static com.stephen.amaze.Models.MazeSquare.POSSIBLE_PATH;
 import static com.stephen.amaze.Models.MazeSquare.START;
 import static com.stephen.amaze.Models.MazeSquare.TRAVERSABLE_PASSAGE_WAY;
 import static com.stephen.amaze.Models.MazeSquare.WALL;
@@ -112,7 +113,6 @@ public class GridFragment extends Fragment {
                     for (MazeSquare s : squares)
                         if (s.getValue() == PATH) s.setValue(TRAVERSABLE_PASSAGE_WAY);
 
-
                     plotPath(mazeItem.getStart(), 0);
 
                     adapter.notifyDataSetChanged();
@@ -131,10 +131,11 @@ public class GridFragment extends Fragment {
 
     boolean plotPath(int[] current, int previous) {
 
-        Log.d("DEBUG", current[1] + " " + current[0] + " " + previous);
+        //Log.d("DEBUG", current[1] + " " + current[0]);
 
         if (Arrays.equals(mazeItem.getEnd(), current)) {
             mazeItem.setSquareValue(current[0], current[1], END);
+            Log.d("DEBUG", current[1] + " " + current[0]);
             return true;
 
         } else {
@@ -143,15 +144,23 @@ public class GridFragment extends Fragment {
             if (current[0]-1 >= 0 && previous != SOUTH) {
 
                 // Check North for Traversable Passage Way. If passage way is traversable...
-                if (mazeItem.getSquareValue(current[0]-1, current[1])  != WALL) {
+                if (mazeItem.getSquareValue(current[0]-1, current[1]) != WALL
+                        && mazeItem.getSquareValue(current[0]-1, current[1]) != POSSIBLE_PATH) {
                     int y = current[0] - 1;
+
+                    // Set Square Value to POSSIBLE_PATH
+                    mazeItem.setSquareValue(current[0], current[1], POSSIBLE_PATH);
 
                     // Recursively call "plotPath" to return true if passage reaches the "end" coordinates
                     if (plotPath(new int[]{y, current[1]}, NORTH)) {
                         int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
                         mazeItem.setSquareValue(current[0], current[1], value);
 
+                        Log.d("DEBUG", current[1] + " " + current[0]);
                         return true;
+
+                    } else {
+                        mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
                     }
                 }
             }
@@ -160,15 +169,23 @@ public class GridFragment extends Fragment {
             if (current[0]+1 < mazeItem.getHeight() && previous != NORTH) {
 
                 // Check South for Traversable Passage Way. If passage way is traversable...
-                if (mazeItem.getSquareValue(current[0]+1, current[1])  != WALL) {
+                if (mazeItem.getSquareValue(current[0]+1, current[1]) != WALL
+                        && mazeItem.getSquareValue(current[0]+1, current[1]) != POSSIBLE_PATH) {
                     int y = current[0] + 1;
+
+                    // Set Square Value to POSSIBLE_PATH
+                    mazeItem.setSquareValue(current[0], current[1], POSSIBLE_PATH);
 
                     // Recursively call "plotPath" to return true if passage reaches the "end" coordinates
                     if (plotPath(new int[]{y, current[1]}, SOUTH)) {
                         int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
                         mazeItem.setSquareValue(current[0], current[1], value);
 
+                        Log.d("DEBUG", current[1] + " " + current[0]);
                         return true;
+
+                    } else {
+                        mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
                     }
                 }
             }
@@ -177,15 +194,23 @@ public class GridFragment extends Fragment {
             if (current[1]+1 < mazeItem.getWidth() && previous != WEST) {
 
                 // Check East for Traversable Passage Way. If passage way is traversable...
-                if (mazeItem.getSquareValue(current[0], current[1]+1)  != WALL) {
+                if (mazeItem.getSquareValue(current[0], current[1]+1) != WALL
+                        && mazeItem.getSquareValue(current[0], current[1]+1) != POSSIBLE_PATH) {
                     int x = current[1] + 1;
+
+                    // Set Square Value to POSSIBLE_PATH
+                    mazeItem.setSquareValue(current[0], current[1], POSSIBLE_PATH);
 
                     // Recursively call "plotPath" to return true if passage reaches the "end" coordinates
                     if (plotPath(new int[]{current[0], x}, EAST)) {
                         int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
                         mazeItem.setSquareValue(current[0], current[1], value);
 
+                        Log.d("DEBUG", current[1] + " " + current[0]);
                         return true;
+
+                    } else {
+                        mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
                     }
                 }
             }
@@ -194,15 +219,23 @@ public class GridFragment extends Fragment {
             if (current[1]-1 >= 0 && previous != EAST) {
 
                 // Check West for Traversable Passage Way. If passage way is traversable...
-                if (mazeItem.getSquareValue(current[0], current[1]-1) != WALL) {
+                if (mazeItem.getSquareValue(current[0], current[1]-1) != WALL
+                        && mazeItem.getSquareValue(current[0], current[1]-1) != POSSIBLE_PATH) {
                     int x = current[1] - 1;
+
+                    // Set Square Value to POSSIBLE_PATH
+                    mazeItem.setSquareValue(current[0], current[1], POSSIBLE_PATH);
 
                     // Recursively call "plotPath" to return true if passage reaches the "end" coordinates
                     if (plotPath(new int[]{current[0], x}, WEST)) {
                         int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
                         mazeItem.setSquareValue(current[0], current[1], value);
 
+                        Log.d("DEBUG", current[1] + " " + current[0]);
                         return true;
+
+                    } else {
+                        mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
                     }
                 }
             }

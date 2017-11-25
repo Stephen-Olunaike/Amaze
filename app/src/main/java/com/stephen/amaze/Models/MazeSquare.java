@@ -7,6 +7,7 @@ public class MazeSquare {
     public static final int START = 2;
     public static final int END = 3;
     public static final int PATH = 4;
+    public static final int POSSIBLE_PATH = 5;
 
     private int index;
     private int value;

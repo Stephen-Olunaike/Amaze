@@ -19,7 +19,7 @@ public class Maze {
 
         int maze_width = 10, maze_height = 10;
         int[] start = {1,1};
-        int[] end = {8,8};
+        int[] end = {4,4};
 
         for (int i=0; i<100; i++) {
 
