@@ -17,7 +17,7 @@ public class Maze {
 
     public Maze() {
         this.mazeItem = generateMaze();
-        generatePickUp( (HEIGHT * WIDTH) / 3);
+        generatePickUp( HEIGHT );
     }
 
     private MazeItem generateMaze() {
@@ -30,7 +30,7 @@ public class Maze {
             int y = new Random().nextInt(HEIGHT);
             int x = new Random().nextInt(WIDTH);
 
-            end = new int[]{y,x};
+            end = new int[] {y,x};
         }
 
 
@@ -60,7 +60,7 @@ public class Maze {
 
     private void generatePickUp(int maxcount) {
 
-        int count = new Random().nextInt(maxcount);
+        int count = new Random().nextInt(maxcount) + 1;
 
         while (count > 0) {
 

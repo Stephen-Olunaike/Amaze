@@ -144,9 +144,7 @@ public class GridFragment extends Fragment {
                     pickupsText.setText(Integer.toString(pickups));
 
                     adapter.notifyDataSetChanged();
-                }
-
-                if (adapter.getItem(i).getValue() != END
+                } else if (adapter.getItem(i).getValue() != END
                         && adapter.getItem(i).getValue() != START
                         && adapter.getItem(i).getValue() != TRAVERSABLE_PASSAGE_WAY) {
                     adapter.getItem(i).setValue(TRAVERSABLE_PASSAGE_WAY);
