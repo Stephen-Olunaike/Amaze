@@ -38,7 +38,7 @@ public class HomeActivity extends AppCompatActivity implements GridFragment.OnFr
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         GridFragment fragment = GridFragment.newInstance(null, null);
-        transaction.add(R.id.home_container, fragment).commit();
+        transaction.replace(R.id.home_container, fragment).commit();
     }
 
     @Override

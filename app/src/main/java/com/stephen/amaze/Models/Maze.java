@@ -34,9 +34,6 @@ public class Maze {
         }
 
 
-        /*int[] start = {1,1};
-        int[] end = {8,8};*/
-
         for (int i=0; i<100; i++) {
 
             int value;

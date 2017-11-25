@@ -17,11 +17,12 @@
             android:text="@string/pick_ups"
             />
         <TextView
+            android:id="@+id/grid_pickups"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:textSize="@dimen/small"
-            android:text="5"
+            android:text="0"
             />
 
 
@@ -33,10 +34,11 @@
             android:text="@string/walls"
             />
         <TextView
+            android:id="@+id/grid_walls"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/small"
-            android:text="5"
+            android:text="0"
             />
 
     </LinearLayout>

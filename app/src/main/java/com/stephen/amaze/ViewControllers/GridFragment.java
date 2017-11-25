@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.stephen.amaze.ExtAdapter.GridAdapter;
 import com.stephen.amaze.ExtViews.NonScrollableGridView;
@@ -17,6 +18,8 @@ import com.stephen.amaze.Models.Maze;
 import com.stephen.amaze.Models.MazeItem;
 import com.stephen.amaze.Models.MazeSquare;
 import com.stephen.amaze.R;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,6 +88,10 @@ public class GridFragment extends Fragment {
 
     private MazeItem mazeItem;
 
+    private int pickups = 0, walls = 0;
+
+    private TextView pickupsText, wallsText;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -94,10 +101,15 @@ public class GridFragment extends Fragment {
         NonScrollableGridView gridView = (NonScrollableGridView) v.findViewById(R.id.grid_maze);
         ImageButton refreshButton = (ImageButton) v.findViewById(R.id.grid_refreshbutton);
 
+        pickupsText = (TextView) v.findViewById(R.id.grid_pickups);
+        wallsText = (TextView) v.findViewById(R.id.grid_walls);
+
         mazeItem = new Maze().getMazeItem();
         squares = mazeItem.getSquares();
 
         plotPath(mazeItem.getStart(), 0);
+        pickupsText.setText(Integer.toString(pickups));
+        wallsText.setText(Integer.toString(walls));
 
         adapter = new GridAdapter(getActivity(), squares);
         gridView.setAdapter(adapter);
@@ -117,53 +129,75 @@ public class GridFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (adapter.getItem(i).getValue() != END
-                        && adapter.getItem(i).getValue() != START) {
+                        && adapter.getItem(i).getValue() != START
+                        && adapter.getItem(i).getValue() != WALL) {
                     adapter.getItem(i).setValue(WALL);
+
+                    walls++;
+                    wallsText.setText(Integer.toString(walls));
 
                     for (MazeSquare s : squares)
                         if (s.getValue() == PATH) s.setValue(TRAVERSABLE_PASSAGE_WAY);
 
+                    pickups=0;
                     plotPath(mazeItem.getStart(), 0);
+                    pickupsText.setText(Integer.toString(pickups));
+
+                    adapter.notifyDataSetChanged();
+                }
+
+                if (adapter.getItem(i).getValue() != END
+                        && adapter.getItem(i).getValue() != START
+                        && adapter.getItem(i).getValue() != TRAVERSABLE_PASSAGE_WAY) {
+                    adapter.getItem(i).setValue(TRAVERSABLE_PASSAGE_WAY);
+
+                    walls--;
+                    wallsText.setText(Integer.toString(walls));
+
+                    for (MazeSquare s : squares)
+                        if (s.getValue() == PATH) s.setValue(TRAVERSABLE_PASSAGE_WAY);
+
+                    pickups=0;
+                    plotPath(mazeItem.getStart(), 0);
+                    pickupsText.setText(Integer.toString(pickups));
 
                     adapter.notifyDataSetChanged();
                 }
             }
         });
 
-        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        /*gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (adapter.getItem(i).getValue() != END
-                        && adapter.getItem(i).getValue() != START) {
-                    adapter.getItem(i).setValue(TRAVERSABLE_PASSAGE_WAY);
 
-                    for (MazeSquare s : squares)
-                        if (s.getValue() == PATH) s.setValue(TRAVERSABLE_PASSAGE_WAY);
-
-                    plotPath(mazeItem.getStart(), 0);
-
-                    adapter.notifyDataSetChanged();
-                }
 
                 return true;
             }
-        });
+        });*/
 
         return v;
     }
 
+    private void incrementPickups(int y, int x) {
+
+        int index = MazeItem.getMazeSquareIndexWithCoord(y, x, mazeItem.getWidth());
+
+        if (squares.get(index).isPickup()) pickups++;
+    }
 
     private static final int NORTH = 1;
     private static final int SOUTH = 2;
     private static final int EAST = 3;
     private static final int WEST = 4;
 
-    boolean plotPath(int[] current, int previous) {
+    private boolean plotPath(int[] current, int previous) {
 
-        //Log.d("DEBUG", current[1] + " " + current[0]);
+        Log.d("DEBUG", current[1] + " " + current[0]);
 
         if (Arrays.equals(mazeItem.getEnd(), current)) {
             mazeItem.setSquareValue(current[0], current[1], END);
+
+            incrementPickups(current[0], current[1]);
             Log.d("DEBUG", current[1] + " " + current[0]);
             return true;
 
@@ -185,6 +219,7 @@ public class GridFragment extends Fragment {
                         int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
                         mazeItem.setSquareValue(current[0], current[1], value);
 
+                        incrementPickups(current[0], current[1]);
                         Log.d("DEBUG", current[1] + " " + current[0]);
                         return true;
 
@@ -210,6 +245,7 @@ public class GridFragment extends Fragment {
                         int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
                         mazeItem.setSquareValue(current[0], current[1], value);
 
+                        incrementPickups(current[0], current[1]);
                         Log.d("DEBUG", current[1] + " " + current[0]);
                         return true;
 
@@ -235,6 +271,7 @@ public class GridFragment extends Fragment {
                         int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
                         mazeItem.setSquareValue(current[0], current[1], value);
 
+                        incrementPickups(current[0], current[1]);
                         Log.d("DEBUG", current[1] + " " + current[0]);
                         return true;
 
@@ -260,6 +297,7 @@ public class GridFragment extends Fragment {
                         int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
                         mazeItem.setSquareValue(current[0], current[1], value);
 
+                        incrementPickups(current[0], current[1]);
                         Log.d("DEBUG", current[1] + " " + current[0]);
                         return true;
 
