@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black">
+    android:layout_height="match_parent">
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/grid_outercolor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="1px">
+        android:layout_centerInParent="true">
 
-        <FrameLayout
+        <RelativeLayout
             android:id="@+id/grid_innercolor"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerInParent="true"
             android:layout_margin="2dp">
 
-        </FrameLayout>
+        </RelativeLayout>
 
-    </FrameLayout>
+    </RelativeLayout>
 
-</FrameLayout>
+</RelativeLayout>

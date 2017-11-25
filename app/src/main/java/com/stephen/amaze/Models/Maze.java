@@ -1,6 +1,8 @@
 package com.stephen.amaze.Models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Created by stephen on 24/11/2017.
@@ -18,8 +20,19 @@ public class Maze {
         ArrayList<MazeSquare> mazeSquares = new ArrayList<>();
 
         int maze_width = 10, maze_height = 10;
-        int[] start = {1,1};
-        int[] end = {4,4};
+
+        int[] start = {new Random().nextInt(maze_height), new Random().nextInt(maze_width)};
+        int[] end = {new Random().nextInt(maze_height), new Random().nextInt(maze_width)};
+
+        while (Arrays.equals(start, end)) {
+            int y = new Random().nextInt(maze_height);
+            int x = new Random().nextInt(maze_width);
+
+            end = new int[]{y,x};
+        }
+
+        /*int[] start = {1,1};
+        int[] end = {8,8};*/
 
         for (int i=0; i<100; i++) {
 

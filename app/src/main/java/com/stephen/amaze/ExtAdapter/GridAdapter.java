@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.stephen.amaze.Models.MazeSquare;
 import com.stephen.amaze.R;
@@ -41,8 +42,8 @@ public class GridAdapter extends ArrayAdapter<MazeSquare> {
                     R.layout.itemof_grid, parent, false);
 
             squareViewHolder = new SquareViewHolder();
-            squareViewHolder.outerColor = (FrameLayout) convertView.findViewById(R.id.grid_outercolor);
-            squareViewHolder.innerColor = (FrameLayout) convertView.findViewById(R.id.grid_innercolor);
+            squareViewHolder.outerColor = (RelativeLayout) convertView.findViewById(R.id.grid_outercolor);
+            squareViewHolder.innerColor = (RelativeLayout) convertView.findViewById(R.id.grid_innercolor);
 
             convertView.setTag(squareViewHolder);
 
@@ -92,6 +93,6 @@ public class GridAdapter extends ArrayAdapter<MazeSquare> {
     }
 
     static class SquareViewHolder {
-        FrameLayout outerColor, innerColor;
+        RelativeLayout outerColor, innerColor;
     }
 }

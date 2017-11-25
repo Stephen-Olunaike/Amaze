@@ -1,15 +1,60 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.stephen.amaze.ViewControllers.GridFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:textSize="@dimen/small"
+            android:text="@string/pick_ups"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:textSize="@dimen/small"
+            android:text="5"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:textSize="@dimen/small"
+            android:text="@string/walls"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/small"
+            android:text="5"
+            />
+
+    </LinearLayout>
 
     <com.stephen.amaze.ExtViews.NonScrollableGridView
         android:id="@+id/grid_maze"
-        android:layout_centerInParent="true"
-        android:scrollbars="none"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         />
 
-</RelativeLayout>
+    <ImageButton
+        android:id="@+id/grid_refreshbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@null"
+        android:layout_gravity="end"
+        android:src="@drawable/ic_action_refresh"/>
+
+</LinearLayout>

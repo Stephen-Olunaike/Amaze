@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.stephen.amaze.ExtAdapter.GridAdapter;
 import com.stephen.amaze.ExtViews.NonScrollableGridView;
@@ -77,8 +79,6 @@ public class GridFragment extends Fragment {
         }
     }
 
-    private NonScrollableGridView gridView;
-
     private ArrayList<MazeSquare> squares;
 
     private GridAdapter adapter;
@@ -91,8 +91,8 @@ public class GridFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_grid, container, false);
 
-        // Generate empty grid view
-        gridView = (NonScrollableGridView) v.findViewById(R.id.grid_maze);
+        NonScrollableGridView gridView = (NonScrollableGridView) v.findViewById(R.id.grid_maze);
+        ImageButton refreshButton = (ImageButton) v.findViewById(R.id.grid_refreshbutton);
 
         mazeItem = new Maze().getMazeItem();
         squares = mazeItem.getSquares();
@@ -105,6 +105,13 @@ public class GridFragment extends Fragment {
         gridView.setExpanded(true);
 
         gridView.setNumColumns(mazeItem.getWidth());
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                refresh();
+            }
+        });
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -267,11 +274,11 @@ public class GridFragment extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    /*public void onButtonPressed(Uri uri) {
+    public void refresh() {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onRefresh();
         }
-    }*/
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -302,6 +309,6 @@ public class GridFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        //void onFragmentInteraction(Uri uri);
+        void onRefresh();
     }
 }
