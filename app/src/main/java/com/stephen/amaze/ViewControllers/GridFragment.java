@@ -23,6 +23,7 @@ import static com.stephen.amaze.Models.MazeSquare.END;
 import static com.stephen.amaze.Models.MazeSquare.PATH;
 import static com.stephen.amaze.Models.MazeSquare.START;
 import static com.stephen.amaze.Models.MazeSquare.TRAVERSABLE_PASSAGE_WAY;
+import static com.stephen.amaze.Models.MazeSquare.WALL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -106,7 +107,7 @@ public class GridFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (adapter.getItem(i).getValue() != END
                         && adapter.getItem(i).getValue() != START) {
-                    adapter.getItem(i).setValue(MazeSquare.WALL);
+                    adapter.getItem(i).setValue(WALL);
 
                     for (MazeSquare s : squares)
                         if (s.getValue() == PATH) s.setValue(TRAVERSABLE_PASSAGE_WAY);
@@ -142,7 +143,7 @@ public class GridFragment extends Fragment {
             if (current[0]-1 >= 0 && previous != SOUTH) {
 
                 // Check North for Traversable Passage Way. If passage way is traversable...
-                if (mazeItem.getSquareValue(current[0]-1, current[1]) == TRAVERSABLE_PASSAGE_WAY) {
+                if (mazeItem.getSquareValue(current[0]-1, current[1])  != WALL) {
                     int y = current[0] - 1;
 
                     // Recursively call "plotPath" to return true if passage reaches the "end" coordinates
@@ -159,7 +160,7 @@ public class GridFragment extends Fragment {
             if (current[0]+1 < mazeItem.getHeight() && previous != NORTH) {
 
                 // Check South for Traversable Passage Way. If passage way is traversable...
-                if (mazeItem.getSquareValue(current[0]+1, current[1]) == TRAVERSABLE_PASSAGE_WAY) {
+                if (mazeItem.getSquareValue(current[0]+1, current[1])  != WALL) {
                     int y = current[0] + 1;
 
                     // Recursively call "plotPath" to return true if passage reaches the "end" coordinates
@@ -176,7 +177,7 @@ public class GridFragment extends Fragment {
             if (current[1]+1 < mazeItem.getWidth() && previous != WEST) {
 
                 // Check East for Traversable Passage Way. If passage way is traversable...
-                if (mazeItem.getSquareValue(current[0], current[1]+1) == TRAVERSABLE_PASSAGE_WAY) {
+                if (mazeItem.getSquareValue(current[0], current[1]+1)  != WALL) {
                     int x = current[1] + 1;
 
                     // Recursively call "plotPath" to return true if passage reaches the "end" coordinates
@@ -193,7 +194,7 @@ public class GridFragment extends Fragment {
             if (current[1]-1 >= 0 && previous != EAST) {
 
                 // Check West for Traversable Passage Way. If passage way is traversable...
-                if (mazeItem.getSquareValue(current[0], current[1]-1) == TRAVERSABLE_PASSAGE_WAY) {
+                if (mazeItem.getSquareValue(current[0], current[1]-1) != WALL) {
                     int x = current[1] - 1;
 
                     // Recursively call "plotPath" to return true if passage reaches the "end" coordinates
