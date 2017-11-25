@@ -13,11 +13,13 @@ public class Maze {
     private static final int HEIGHT = 10;
     private static final int WIDTH = 10;
 
-    MazeItem mazeItem;
+    private MazeItem mazeItem;
+
+    private int numberOfPickups = 0;
 
     public Maze() {
         this.mazeItem = generateMaze();
-        generatePickUp( HEIGHT );
+        this.numberOfPickups = generatePickUp( HEIGHT );
     }
 
     private MazeItem generateMaze() {
@@ -58,9 +60,11 @@ public class Maze {
         return mazeItem;
     }
 
-    private void generatePickUp(int maxcount) {
+    private int generatePickUp(int maxcount) {
 
-        int count = new Random().nextInt(maxcount) + 1;
+        int total_pickups = new Random().nextInt(maxcount) + 1;
+
+        int count = total_pickups;
 
         while (count > 0) {
 
@@ -69,5 +73,10 @@ public class Maze {
             if (mazeItem.setIndexAsPickUp(pickup_index)) count--;
         }
 
+        return total_pickups;
+    }
+
+    public int getNumberOfPickups() {
+        return numberOfPickups;
     }
 }

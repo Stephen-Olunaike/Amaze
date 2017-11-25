@@ -86,6 +86,8 @@ public class GridFragment extends Fragment {
 
     private GridAdapter adapter;
 
+    private Maze maze;
+
     private MazeItem mazeItem;
 
     private int pickups = 0, walls = 0;
@@ -104,11 +106,12 @@ public class GridFragment extends Fragment {
         pickupsText = (TextView) v.findViewById(R.id.grid_pickups);
         wallsText = (TextView) v.findViewById(R.id.grid_walls);
 
-        mazeItem = new Maze().getMazeItem();
+        maze = new Maze();
+        mazeItem = maze.getMazeItem();
         squares = mazeItem.getSquares();
 
         plotPath(mazeItem.getStart(), 0);
-        pickupsText.setText(Integer.toString(pickups));
+        pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
         wallsText.setText(Integer.toString(walls));
 
         adapter = new GridAdapter(getActivity(), squares);
@@ -141,7 +144,7 @@ public class GridFragment extends Fragment {
 
                     pickups=0;
                     plotPath(mazeItem.getStart(), 0);
-                    pickupsText.setText(Integer.toString(pickups));
+                    pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
 
                     adapter.notifyDataSetChanged();
                 } else if (adapter.getItem(i).getValue() != END
@@ -157,7 +160,7 @@ public class GridFragment extends Fragment {
 
                     pickups=0;
                     plotPath(mazeItem.getStart(), 0);
-                    pickupsText.setText(Integer.toString(pickups));
+                    pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
 
                     adapter.notifyDataSetChanged();
                 }
