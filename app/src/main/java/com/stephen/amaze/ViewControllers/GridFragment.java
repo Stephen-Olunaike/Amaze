@@ -96,6 +96,9 @@ public class GridFragment extends Fragment {
 
         mazeItem = new Maze().getMazeItem();
         squares = mazeItem.getSquares();
+
+        plotPath(mazeItem.getStart(), 0);
+
         adapter = new GridAdapter(getActivity(), squares);
         gridView.setAdapter(adapter);
 
@@ -117,6 +120,25 @@ public class GridFragment extends Fragment {
 
                     adapter.notifyDataSetChanged();
                 }
+            }
+        });
+
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (adapter.getItem(i).getValue() != END
+                        && adapter.getItem(i).getValue() != START) {
+                    adapter.getItem(i).setValue(TRAVERSABLE_PASSAGE_WAY);
+
+                    for (MazeSquare s : squares)
+                        if (s.getValue() == PATH) s.setValue(TRAVERSABLE_PASSAGE_WAY);
+
+                    plotPath(mazeItem.getStart(), 0);
+
+                    adapter.notifyDataSetChanged();
+                }
+
+                return true;
             }
         });
 
