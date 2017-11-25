@@ -11,10 +11,12 @@ public class MazeSquare {
 
     private int index;
     private int value;
+    private boolean pickup;
 
     public MazeSquare(int index, int value) {
         this.index = index;
         this.value = value;
+        this.pickup = false;
     }
 
     public int getIndex() {
@@ -27,5 +29,13 @@ public class MazeSquare {
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    public boolean isPickup() {
+        return pickup;
+    }
+
+    public void setPickup(boolean pickup) {
+        this.pickup = pickup;
     }
 }

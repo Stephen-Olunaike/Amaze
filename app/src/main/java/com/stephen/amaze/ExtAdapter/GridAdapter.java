@@ -89,6 +89,11 @@ public class GridAdapter extends ArrayAdapter<MazeSquare> {
             squareViewHolder.innerColor.setBackgroundColor(inner_color);
         }
 
+        if (mazeSquare.isPickup()) {
+            squareViewHolder.outerColor.setBackgroundColor(activity.getColor(R.color.colorAccent));
+            squareViewHolder.innerColor.setBackgroundColor(activity.getColor(R.color.white));
+        }
+
         return convertView;
     }
 

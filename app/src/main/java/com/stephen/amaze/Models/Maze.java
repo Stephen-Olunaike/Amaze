@@ -9,27 +9,30 @@ import java.util.Random;
  */
 
 public class Maze {
+    
+    private static final int HEIGHT = 10;
+    private static final int WIDTH = 10;
 
     MazeItem mazeItem;
 
     public Maze() {
         this.mazeItem = generateMaze();
+        generatePickUp( (HEIGHT * WIDTH) / 3);
     }
 
     private MazeItem generateMaze() {
         ArrayList<MazeSquare> mazeSquares = new ArrayList<>();
 
-        int maze_width = 10, maze_height = 10;
-
-        int[] start = {new Random().nextInt(maze_height), new Random().nextInt(maze_width)};
-        int[] end = {new Random().nextInt(maze_height), new Random().nextInt(maze_width)};
+        int[] start = {new Random().nextInt(HEIGHT), new Random().nextInt(WIDTH)};
+        int[] end = {new Random().nextInt(HEIGHT), new Random().nextInt(WIDTH)};
 
         while (Arrays.equals(start, end)) {
-            int y = new Random().nextInt(maze_height);
-            int x = new Random().nextInt(maze_width);
+            int y = new Random().nextInt(HEIGHT);
+            int x = new Random().nextInt(WIDTH);
 
             end = new int[]{y,x};
         }
+
 
         /*int[] start = {1,1};
         int[] end = {8,8};*/
@@ -38,10 +41,10 @@ public class Maze {
 
             int value;
 
-            if (i == MazeItem.getMazeSquareIndexWithCoord(start[0], start[1], maze_width)) {
+            if (i == MazeItem.getMazeSquareIndexWithCoord(start[0], start[1], WIDTH)) {
                 value = MazeSquare.START;
 
-            } else if (i == MazeItem.getMazeSquareIndexWithCoord(end[0], end[1], maze_width)) {
+            } else if (i == MazeItem.getMazeSquareIndexWithCoord(end[0], end[1], WIDTH)) {
                 value = MazeSquare.END;
 
             } else {
@@ -51,10 +54,23 @@ public class Maze {
             mazeSquares.add(new MazeSquare(i, value));
         }
 
-        return new MazeItem(maze_width, maze_height, mazeSquares, start, end);
+        return new MazeItem(WIDTH, HEIGHT, mazeSquares, start, end);
     }
 
     public MazeItem getMazeItem() {
         return mazeItem;
+    }
+
+    private void generatePickUp(int maxcount) {
+
+        int count = new Random().nextInt(maxcount);
+
+        while (count > 0) {
+
+            int pickup_index = new Random().nextInt(mazeItem.getSquares().size());
+
+            if (mazeItem.setIndexAsPickUp(pickup_index)) count--;
+        }
+
     }
 }

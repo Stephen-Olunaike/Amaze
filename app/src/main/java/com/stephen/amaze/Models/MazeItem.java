@@ -52,4 +52,11 @@ public class MazeItem {
     public ArrayList<MazeSquare> getSquares() {
         return squares;
     }
+
+    public boolean setIndexAsPickUp(int index) {
+        if (squares.get(index).isPickup()) return false;
+
+        squares.get(index).setPickup(true);
+        return true;
+    }
 }
