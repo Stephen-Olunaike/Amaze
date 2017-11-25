@@ -41,7 +41,8 @@ public class GridAdapter extends ArrayAdapter<MazeSquare> {
                     R.layout.itemof_grid, parent, false);
 
             squareViewHolder = new SquareViewHolder();
-            squareViewHolder.background = (FrameLayout) convertView.findViewById(R.id.grid_background);
+            squareViewHolder.outerColor = (FrameLayout) convertView.findViewById(R.id.grid_outercolor);
+            squareViewHolder.innerColor = (FrameLayout) convertView.findViewById(R.id.grid_innercolor);
 
             convertView.setTag(squareViewHolder);
 
@@ -53,38 +54,44 @@ public class GridAdapter extends ArrayAdapter<MazeSquare> {
 
         if (squareViewHolder != null) {
 
-            int color;
+            int outer_color, inner_color;
 
             switch (mazeSquare.getValue()) {
 
                 case MazeSquare.WALL :
-                    color = activity.getColor(R.color.black);
+                    outer_color = activity.getColor(R.color.black);
+                    inner_color = activity.getColor(R.color.black);
                     break;
 
                 case MazeSquare.START :
-                    color = activity.getColor(R.color.colorPrimaryDark);
+                    outer_color = activity.getColor(R.color.white);
+                    inner_color = activity.getColor(R.color.colorPrimaryDark);
                     break;
 
                 case MazeSquare.END :
-                    color = activity.getColor(R.color.colorPrimaryDark);
+                    outer_color = activity.getColor(R.color.white);
+                    inner_color = activity.getColor(R.color.colorPrimaryDark);
                     break;
 
                 case MazeSquare.PATH :
-                    color = activity.getColor(R.color.colorPrimary);
+                    outer_color = activity.getColor(R.color.white);
+                    inner_color = activity.getColor(R.color.colorAccent);
                     break;
 
                 default:
-                    color = activity.getColor(R.color.white);
+                    outer_color = activity.getColor(R.color.white);
+                    inner_color = activity.getColor(R.color.white);
                     break;
             }
 
-            squareViewHolder.background.setBackgroundColor(color);
+            squareViewHolder.outerColor.setBackgroundColor(outer_color);
+            squareViewHolder.innerColor.setBackgroundColor(inner_color);
         }
 
         return convertView;
     }
 
     static class SquareViewHolder {
-        FrameLayout background;
+        FrameLayout outerColor, innerColor;
     }
 }
