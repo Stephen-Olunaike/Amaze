@@ -42,12 +42,32 @@
 
     </LinearLayout>
 
-    <com.stephen.amaze.ExtViews.NonScrollableGridView
-        android:id="@+id/grid_maze"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        />
+        android:layout_weight="1">
+
+        <com.stephen.amaze.ExtViews.NonScrollableGridView
+            android:id="@+id/grid_maze"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+        <FrameLayout
+            android:id="@+id/grid_progressbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:clickable="true">
+
+            <ProgressBar
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"/>
+
+        </FrameLayout>
+
+    </FrameLayout>
 
     <ImageButton
         android:id="@+id/grid_refreshbutton"

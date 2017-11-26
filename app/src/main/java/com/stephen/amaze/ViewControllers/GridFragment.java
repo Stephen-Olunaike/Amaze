@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -93,6 +94,8 @@ public class GridFragment extends Fragment {
 
     private TextView pickupsText, wallsText;
 
+    private FrameLayout progressBar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -104,6 +107,8 @@ public class GridFragment extends Fragment {
 
         pickupsText = (TextView) v.findViewById(R.id.grid_pickups);
         wallsText = (TextView) v.findViewById(R.id.grid_walls);
+
+        progressBar = (FrameLayout) v.findViewById(R.id.grid_progressbar);
 
         maze = new Maze();
         mazeItem = maze.getMazeItem();
@@ -135,6 +140,7 @@ public class GridFragment extends Fragment {
                 if (adapter.getItem(i).getValue() != END
                         && adapter.getItem(i).getValue() != START
                         && adapter.getItem(i).getValue() != WALL) {
+
                     adapter.getItem(i).setValue(WALL);
 
                     walls++;
@@ -146,9 +152,11 @@ public class GridFragment extends Fragment {
                     pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
                     calculatePathDirectionForEachSquare();
 
+
                 } else if (adapter.getItem(i).getValue() != END
                         && adapter.getItem(i).getValue() != START
                         && adapter.getItem(i).getValue() != TRAVERSABLE_PASSAGE_WAY) {
+
                     adapter.getItem(i).setValue(TRAVERSABLE_PASSAGE_WAY);
 
                     walls--;
@@ -159,7 +167,6 @@ public class GridFragment extends Fragment {
                     plotPath(mazeItem.getStart(), 0);
                     pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
                     calculatePathDirectionForEachSquare();
-
                 }
 
                 adapter.notifyDataSetChanged();
@@ -320,7 +327,7 @@ public class GridFragment extends Fragment {
 
         } else {
 
-            if (mazeItem.getStart()[0] > mazeItem.getEnd()[0]) {
+            if (current[0] > mazeItem.getEnd()[0]) {
                 if (checkNorth(current, previous)) return true;
                 if (checkSouth(current, previous)) return true;
 
@@ -329,7 +336,7 @@ public class GridFragment extends Fragment {
                 if (checkNorth(current, previous)) return true;
             }
 
-            if (mazeItem.getStart()[1] < mazeItem.getEnd()[1]) {
+            if (current[1] < mazeItem.getEnd()[1]) {
                 if (checkEast(current, previous)) return true;
                 if (checkWest(current, previous)) return true;
 
@@ -341,8 +348,6 @@ public class GridFragment extends Fragment {
             return false;
         }
     }
-
-
 
     private boolean checkNorth(int[] current, int previous) {
         // If not at the top edge, and did not just move South...
