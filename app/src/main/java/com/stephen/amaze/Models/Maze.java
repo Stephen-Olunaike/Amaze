@@ -41,12 +41,24 @@ public class Maze {
         this.start = new int[] {new Random().nextInt(height), new Random().nextInt(width)};
         this.end = new int[] {new Random().nextInt(height), new Random().nextInt(width)};
 
+        int y_diff = end[0] - start[0];
+        y_diff = (y_diff < 0) ? (-1 * y_diff) : y_diff;
 
-        while (Arrays.equals(start, end)) {
+        int x_diff = end[1] - start[1];
+        x_diff = (x_diff < 0) ? (-1 * x_diff) : x_diff;
+
+        while (Arrays.equals(start, end) || y_diff<2 || x_diff<2) {
+
             int y = new Random().nextInt(height);
             int x = new Random().nextInt(width);
 
             end = new int[] {y,x};
+
+            y_diff = end[0] - start[0];
+            y_diff = (y_diff < 0) ? (-1 * y_diff) : y_diff;
+
+            x_diff = end[1] - start[1];
+            x_diff = (x_diff < 0) ? (-1 * x_diff) : x_diff;
         }
 
         for (int i=0; i<width*height; i++) {

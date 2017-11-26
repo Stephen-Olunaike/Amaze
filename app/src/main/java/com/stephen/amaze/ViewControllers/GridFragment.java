@@ -349,22 +349,52 @@ public class GridFragment extends Fragment {
 
         } else {
 
-            if (current[0] > maze.getEnd()[0]) {
-                if (checkNorth(current, previous)) return true;
-                if (checkSouth(current, previous)) return true;
+            int y_diff = maze.getEnd()[0] - current[0];
+            y_diff = (y_diff < 0) ? (-1 * y_diff) : y_diff;
+
+            int x_diff = maze.getEnd()[1] - current[1];
+            x_diff = (x_diff < 0) ? (-1 * x_diff) : x_diff;
+
+
+            if (y_diff > x_diff) {
+
+                if (current[0] > maze.getEnd()[0]) {
+                    if (checkNorth(current, previous)) return true;
+                    if (checkSouth(current, previous)) return true;
+
+                } else {
+                    if (checkSouth(current, previous)) return true;
+                    if (checkNorth(current, previous)) return true;
+                }
+
+                if (current[1] < maze.getEnd()[1]) {
+                    if (checkEast(current, previous)) return true;
+                    if (checkWest(current, previous)) return true;
+
+                } else {
+                    if (checkWest(current, previous)) return true;
+                    if (checkEast(current, previous)) return true;
+                }
 
             } else {
-                if (checkSouth(current, previous)) return true;
-                if (checkNorth(current, previous)) return true;
-            }
 
-            if (current[1] < maze.getEnd()[1]) {
-                if (checkEast(current, previous)) return true;
-                if (checkWest(current, previous)) return true;
+                if (current[1] < maze.getEnd()[1]) {
+                    if (checkEast(current, previous)) return true;
+                    if (checkWest(current, previous)) return true;
 
-            } else {
-                if (checkWest(current, previous)) return true;
-                if (checkEast(current, previous)) return true;
+                } else {
+                    if (checkWest(current, previous)) return true;
+                    if (checkEast(current, previous)) return true;
+                }
+
+                if (current[0] > maze.getEnd()[0]) {
+                    if (checkNorth(current, previous)) return true;
+                    if (checkSouth(current, previous)) return true;
+
+                } else {
+                    if (checkSouth(current, previous)) return true;
+                    if (checkNorth(current, previous)) return true;
+                }
             }
 
             return false;
