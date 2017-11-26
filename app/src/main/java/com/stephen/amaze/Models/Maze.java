@@ -25,6 +25,9 @@ public class Maze {
     private MazeItem generateMaze() {
         ArrayList<MazeSquare> mazeSquares = new ArrayList<>();
 
+        //int[] start = {5,5};
+        //int[] end = {2,7};
+
         int[] start = {new Random().nextInt(HEIGHT), new Random().nextInt(WIDTH)};
         int[] end = {new Random().nextInt(HEIGHT), new Random().nextInt(WIDTH)};
 
@@ -34,7 +37,6 @@ public class Maze {
 
             end = new int[] {y,x};
         }
-
 
         for (int i=0; i<100; i++) {
 
