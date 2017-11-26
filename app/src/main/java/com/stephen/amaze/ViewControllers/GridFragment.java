@@ -2,6 +2,7 @@ package com.stephen.amaze.ViewControllers;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -113,7 +114,8 @@ public class GridFragment extends Fragment {
         //squares = maze.getSquares();
 
         pickups = 0; walls = 0;
-        plotPath(maze.getStart(), 0);
+
+        new FindPathTask().execute(maze.getStart());
 
         pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
         calculatePathDirectionForEachSquare();
@@ -133,13 +135,15 @@ public class GridFragment extends Fragment {
                 maze.generateMaze();
 
                 pickups = 0; walls = 0;
-                plotPath(maze.getStart(), 0);
-                pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
-                calculatePathDirectionForEachSquare();
-
                 wallsText.setText(Integer.toString(walls));
 
-                adapter.notifyDataSetChanged();
+                new FindPathTask().execute(maze.getStart());
+
+                //pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
+                //calculatePathDirectionForEachSquare();
+
+
+                //adapter.notifyDataSetChanged();
             }
         });
 
@@ -155,11 +159,14 @@ public class GridFragment extends Fragment {
                     walls++;
                     wallsText.setText(Integer.toString(walls));
 
-                    clearSquares();
                     pickups = 0;
-                    plotPath(maze.getStart(), 0);
-                    pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
-                    calculatePathDirectionForEachSquare();
+
+                    new FindPathTask().execute(maze.getStart());
+                    //clearSquares();
+                    //plotPath(maze.getStart(), 0);
+
+                    //pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
+                    //calculatePathDirectionForEachSquare();
 
 
                 } else if (adapter.getItem(i).getValue() != END
@@ -171,14 +178,17 @@ public class GridFragment extends Fragment {
                     walls--;
                     wallsText.setText(Integer.toString(walls));
 
-                    clearSquares();
                     pickups = 0;
-                    plotPath(maze.getStart(), 0);
-                    pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
-                    calculatePathDirectionForEachSquare();
+
+                    new FindPathTask().execute(maze.getStart());
+                    //clearSquares();
+                    //plotPath(maze.getStart(), 0);
+
+                    //pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
+                    //calculatePathDirectionForEachSquare();
                 }
 
-                adapter.notifyDataSetChanged();
+                //adapter.notifyDataSetChanged();
             }
         });
 
@@ -320,8 +330,7 @@ public class GridFragment extends Fragment {
     private static final int EAST = 3;
     private static final int WEST = 4;
 
-    private boolean plotPath(int[] current, int previous) {
-
+    private synchronized boolean plotPath(int[] current, int previous) {
 
         if (Arrays.equals(maze.getEnd(), current)) {
             maze.setSquareValue(current[0], current[1], END);
@@ -499,6 +508,35 @@ public class GridFragment extends Fragment {
         }
 
         return false;
+    }
+
+    private class FindPathTask extends AsyncTask<int[], Integer, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Boolean doInBackground(int[]... ints) {
+
+            clearSquares();
+
+            boolean solved = plotPath(ints[0], NO_PATH);
+
+            if (solved) {
+                pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
+                calculatePathDirectionForEachSquare();
+            }
+
+            return solved;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            progressBar.setVisibility(View.GONE);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
