@@ -63,8 +63,4 @@ public class HomeActivity extends AppCompatActivity implements GridFragment.OnFr
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onRefresh() {
-        showGridFragment();
-    }
 }
