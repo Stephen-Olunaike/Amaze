@@ -8,8 +8,8 @@ import java.util.Random;
 
 public class Maze {
 
-    private static final int HEIGHT = 10;
-    private static final int WIDTH = 10;
+    private static final int HEIGHT = 5;
+    private static final int WIDTH = 5;
 
     private int width;
     private int height;
@@ -27,10 +27,10 @@ public class Maze {
         this.height = HEIGHT;
         this.squares = new ArrayList<>();
         this.start = new int[] {0,0};
-        this.end = new int[] {HEIGHT-1, WIDTH-1};
+        this.end = new int[] {height-1, width-1};
     }
 
-    public ArrayList<MazeSquare> generateMaze() {
+    public void generateMaze() {
         this.squares.clear();
 
         ArrayList<MazeSquare> temp = new ArrayList<>();
@@ -38,25 +38,25 @@ public class Maze {
         //int[] start = {5,5};
         //int[] end = {2,7};
 
-        this.start = new int[] {new Random().nextInt(HEIGHT), new Random().nextInt(WIDTH)};
-        this.end = new int[] {new Random().nextInt(HEIGHT), new Random().nextInt(WIDTH)};
+        this.start = new int[] {new Random().nextInt(height), new Random().nextInt(width)};
+        this.end = new int[] {new Random().nextInt(height), new Random().nextInt(width)};
 
 
         while (Arrays.equals(start, end)) {
-            int y = new Random().nextInt(HEIGHT);
-            int x = new Random().nextInt(WIDTH);
+            int y = new Random().nextInt(height);
+            int x = new Random().nextInt(width);
 
             end = new int[] {y,x};
         }
 
-        for (int i=0; i<100; i++) {
+        for (int i=0; i<width*height; i++) {
 
             int value;
 
-            if (i == Maze.getMazeSquareIndexWithCoord(start[0], start[1], WIDTH)) {
+            if (i == Maze.getMazeSquareIndexWithCoord(start[0], start[1], width)) {
                 value = MazeSquare.START;
 
-            } else if (i == Maze.getMazeSquareIndexWithCoord(end[0], end[1], WIDTH)) {
+            } else if (i == Maze.getMazeSquareIndexWithCoord(end[0], end[1], width)) {
                 value = MazeSquare.END;
 
             } else {
@@ -68,9 +68,7 @@ public class Maze {
 
         this.squares.addAll(temp);
 
-        this.numberOfPickups = generatePickUps(HEIGHT);
-
-        return squares;
+        this.numberOfPickups = generatePickUps(height);
     }
 
     private int generatePickUps(int maxcount) {

@@ -93,6 +93,8 @@ public class GridFragment extends Fragment {
 
     private FrameLayout progressBar;
 
+    private ImageButton refreshButton;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -100,7 +102,7 @@ public class GridFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_grid, container, false);
 
         NonScrollableGridView gridView = (NonScrollableGridView) v.findViewById(R.id.grid_maze);
-        ImageButton refreshButton = (ImageButton) v.findViewById(R.id.grid_refreshbutton);
+        refreshButton = (ImageButton) v.findViewById(R.id.grid_refreshbutton);
 
         pickupsText = (TextView) v.findViewById(R.id.grid_pickups);
         wallsText = (TextView) v.findViewById(R.id.grid_walls);
@@ -115,6 +117,7 @@ public class GridFragment extends Fragment {
 
         pickups = 0; walls = 0;
 
+        //progressBar.setVisibility(View.VISIBLE);
         new FindPathTask().execute(maze.getStart());
 
         pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
@@ -132,6 +135,8 @@ public class GridFragment extends Fragment {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                refreshButton.setClickable(false);
+
                 maze.generateMaze();
 
                 pickups = 0; walls = 0;
@@ -143,7 +148,7 @@ public class GridFragment extends Fragment {
                 //calculatePathDirectionForEachSquare();
 
 
-                //adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -309,10 +314,10 @@ public class GridFragment extends Fragment {
                         direction = getActivity().getDrawable(R.drawable.up);
                         break;
                     case EAST:
-                        direction = getActivity().getDrawable(R.drawable.right);
+                        direction = getActivity().getDrawable(R.drawable.left);
                         break;
                     case WEST:
-                        direction = getActivity().getDrawable(R.drawable.left);
+                        direction = getActivity().getDrawable(R.drawable.right);
                         break;
                     default:
                         direction = null;
@@ -330,7 +335,7 @@ public class GridFragment extends Fragment {
     private static final int EAST = 3;
     private static final int WEST = 4;
 
-    private synchronized boolean plotPath(int[] current, int previous) {
+    private boolean plotPath(int[] current, int previous) {
 
         if (Arrays.equals(maze.getEnd(), current)) {
             maze.setSquareValue(current[0], current[1], END);
@@ -525,7 +530,6 @@ public class GridFragment extends Fragment {
             boolean solved = plotPath(ints[0], NO_PATH);
 
             if (solved) {
-                pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
                 calculatePathDirectionForEachSquare();
             }
 
@@ -534,8 +538,10 @@ public class GridFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            progressBar.setVisibility(View.GONE);
+            pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
+            progressBar.setVisibility(View.INVISIBLE);
             adapter.notifyDataSetChanged();
+            refreshButton.setClickable(true);
         }
     }
 
