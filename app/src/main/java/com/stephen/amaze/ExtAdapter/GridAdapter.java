@@ -58,8 +58,9 @@ public class GridAdapter extends ArrayAdapter<MazeSquare> {
 
         if (squareViewHolder != null) {
 
+            // check value and pick up
             int outer_color = activity.getColor(R.color.white);
-            Drawable image = null, valueImage = null;
+            Drawable valueImage = null;
 
             switch (mazeSquare.getValue()) {
 
@@ -67,38 +68,63 @@ public class GridAdapter extends ArrayAdapter<MazeSquare> {
                     outer_color = activity.getColor(R.color.black);
                     break;
 
-                case MazeSquare.START :
-                    image = activity.getDrawable(R.drawable.cross);
+                case MazeSquare.START : case MazeSquare.END :
                     valueImage = activity.getDrawable(R.drawable.point);
-                    break;
-
-                case MazeSquare.END :
-                    image = activity.getDrawable(R.drawable.cross);
-                    valueImage = activity.getDrawable(R.drawable.point);
+                    if (mazeSquare.isPickup()) valueImage = activity.getDrawable(R.drawable.picked_up);
                     break;
 
                 case MazeSquare.PATH :
-                    image = activity.getDrawable(R.drawable.cross);
+                    if (mazeSquare.isPickup()) valueImage = activity.getDrawable(R.drawable.picked_up);
                     break;
 
                 default:
                     outer_color = activity.getColor(R.color.white);
-                    image = null;
                     valueImage = null;
+                    if (mazeSquare.isPickup()) valueImage = activity.getDrawable(R.drawable.pick_up);
                     break;
             }
-
-            squareViewHolder.directionView.setImageResource(0);
-            if (image != null) squareViewHolder.directionView.setImageDrawable(image);
 
             squareViewHolder.valueView.setImageResource(0);
             if (valueImage != null) squareViewHolder.valueView.setImageDrawable(valueImage);
 
             squareViewHolder.outerColor.setBackgroundColor(outer_color);
 
-            if (mazeSquare.isPickup()) {
-                squareViewHolder.outerColor.setBackgroundColor(activity.getColor(R.color.colorPrimary));
+            // check direction
+            Drawable directionImage;
+
+            switch (mazeSquare.getDirection()) {
+
+                case MazeSquare.VERT :
+                    directionImage = activity.getDrawable(R.drawable.vert);
+                    break;
+
+                case MazeSquare.HORZ :
+                    directionImage = activity.getDrawable(R.drawable.horz);
+                    break;
+
+                case MazeSquare.UP_LEFT :
+                    directionImage = activity.getDrawable(R.drawable.up_left);
+                    break;
+
+                case MazeSquare.UP_RIGHT :
+                    directionImage = activity.getDrawable(R.drawable.up_right);
+                    break;
+
+                case MazeSquare.DOWN_LEFT :
+                    directionImage = activity.getDrawable(R.drawable.down_left);
+                    break;
+
+                case MazeSquare.DOWN_RIGHT :
+                    directionImage = activity.getDrawable(R.drawable.down_right);
+                    break;
+
+                default:
+                    directionImage = null;
+                    break;
             }
+
+            squareViewHolder.directionView.setImageResource(0);
+            if (directionImage != null) squareViewHolder.directionView.setImageDrawable(directionImage);
         }
 
         return convertView;

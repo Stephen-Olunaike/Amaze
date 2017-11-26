@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -19,16 +18,21 @@ import com.stephen.amaze.Models.MazeItem;
 import com.stephen.amaze.Models.MazeSquare;
 import com.stephen.amaze.R;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.stephen.amaze.Models.MazeSquare.DOWN_LEFT;
+import static com.stephen.amaze.Models.MazeSquare.DOWN_RIGHT;
 import static com.stephen.amaze.Models.MazeSquare.END;
+import static com.stephen.amaze.Models.MazeSquare.HORZ;
+import static com.stephen.amaze.Models.MazeSquare.NO_PATH;
 import static com.stephen.amaze.Models.MazeSquare.PATH;
 import static com.stephen.amaze.Models.MazeSquare.POSSIBLE_PATH;
 import static com.stephen.amaze.Models.MazeSquare.START;
 import static com.stephen.amaze.Models.MazeSquare.TRAVERSABLE_PASSAGE_WAY;
+import static com.stephen.amaze.Models.MazeSquare.UP_LEFT;
+import static com.stephen.amaze.Models.MazeSquare.UP_RIGHT;
+import static com.stephen.amaze.Models.MazeSquare.VERT;
 import static com.stephen.amaze.Models.MazeSquare.WALL;
 
 /**
@@ -142,7 +146,7 @@ public class GridFragment extends Fragment {
                     for (MazeSquare s : squares)
                         if (s.getValue() == PATH) s.setValue(TRAVERSABLE_PASSAGE_WAY);
 
-                    pickups=0;
+                    pickups = 0;
                     plotPath(mazeItem.getStart(), 0);
                     pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
 
@@ -158,7 +162,7 @@ public class GridFragment extends Fragment {
                     for (MazeSquare s : squares)
                         if (s.getValue() == PATH) s.setValue(TRAVERSABLE_PASSAGE_WAY);
 
-                    pickups=0;
+                    pickups = 0;
                     plotPath(mazeItem.getStart(), 0);
                     pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
 
@@ -198,6 +202,9 @@ public class GridFragment extends Fragment {
         if (Arrays.equals(mazeItem.getEnd(), current)) {
             mazeItem.setSquareValue(current[0], current[1], END);
 
+            // Set the direction of the path
+            updatePathDirection(current, previous, NO_PATH);
+
             incrementPickups(current[0], current[1]);
             Log.d("DEBUG", current[1] + " " + current[0]);
             return true;
@@ -222,126 +229,90 @@ public class GridFragment extends Fragment {
                 if (checkEast(current, previous)) return true;
             }
 
-            // If not at the top edge, and did not just move South...
-            /*if (current[0]-1 >= 0 && previous != SOUTH) {
-
-                // Check North for Traversable Passage Way. If passage way is traversable...
-                if (mazeItem.getSquareValue(current[0]-1, current[1]) != WALL
-                        && mazeItem.getSquareValue(current[0]-1, current[1]) != POSSIBLE_PATH
-                        && mazeItem.getSquareValue(current[0]-1, current[1]) != START) {
-                    int y = current[0] - 1;
-
-                    // Set Square Value to POSSIBLE_PATH
-                    mazeItem.setSquareValue(current[0], current[1], POSSIBLE_PATH);
-
-                    // Recursively call "plotPath" to return true if passage reaches the "end" coordinates
-                    if (plotPath(new int[]{y, current[1]}, NORTH)) {
-                        int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
-                        mazeItem.setSquareValue(current[0], current[1], value);
-
-                        incrementPickups(current[0], current[1]);
-                        Log.d("DEBUG", current[1] + " " + current[0]);
-                        return true;
-
-                    } else {
-                        mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
-                    }
-                }
-            }*/
-
-            // If not at the bottom edge, and did not just move North...
-            /*if (current[0]+1 < mazeItem.getHeight() && previous != NORTH) {
-
-                // Check South for Traversable Passage Way. If passage way is traversable...
-                if (mazeItem.getSquareValue(current[0]+1, current[1]) != WALL
-                        && mazeItem.getSquareValue(current[0]+1, current[1]) != POSSIBLE_PATH
-                        && mazeItem.getSquareValue(current[0]+1, current[1]) != START) {
-                    int y = current[0] + 1;
-
-                    // Set Square Value to POSSIBLE_PATH
-                    mazeItem.setSquareValue(current[0], current[1], POSSIBLE_PATH);
-
-                    // Recursively call "plotPath" to return true if passage reaches the "end" coordinates
-                    if (plotPath(new int[]{y, current[1]}, SOUTH)) {
-                        int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
-                        mazeItem.setSquareValue(current[0], current[1], value);
-
-                        incrementPickups(current[0], current[1]);
-                        Log.d("DEBUG", current[1] + " " + current[0]);
-                        return true;
-
-                    } else {
-                        mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
-                    }
-                }
-            }*/
-
-            // If not at the right edge, and did not just move West...
-            /*if (current[1]+1 < mazeItem.getWidth() && previous != WEST) {
-
-                // Check East for Traversable Passage Way. If passage way is traversable...
-                if (mazeItem.getSquareValue(current[0], current[1]+1) != WALL
-                        && mazeItem.getSquareValue(current[0], current[1]+1) != POSSIBLE_PATH
-                        && mazeItem.getSquareValue(current[0], current[1]+1) != START) {
-                    int x = current[1] + 1;
-
-                    // Set Square Value to POSSIBLE_PATH
-                    mazeItem.setSquareValue(current[0], current[1], POSSIBLE_PATH);
-
-                    // Recursively call "plotPath" to return true if passage reaches the "end" coordinates
-                    if (plotPath(new int[]{current[0], x}, EAST)) {
-                        int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
-                        mazeItem.setSquareValue(current[0], current[1], value);
-
-                        incrementPickups(current[0], current[1]);
-                        Log.d("DEBUG", current[1] + " " + current[0]);
-                        return true;
-
-                    } else {
-                        mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
-                    }
-                }
-            }*/
-
-            // If not at the left edge, and did not just move East...
-            /*if (current[1]-1 >= 0 && previous != EAST) {
-
-                // Check West for Traversable Passage Way. If passage way is traversable...
-                if (mazeItem.getSquareValue(current[0], current[1]-1) != WALL
-                        && mazeItem.getSquareValue(current[0], current[1]-1) != POSSIBLE_PATH
-                        && mazeItem.getSquareValue(current[0], current[1]-1) != START) {
-                    int x = current[1] - 1;
-
-                    // Set Square Value to POSSIBLE_PATH
-                    mazeItem.setSquareValue(current[0], current[1], POSSIBLE_PATH);
-
-                    // Recursively call "plotPath" to return true if passage reaches the "end" coordinates
-                    if (plotPath(new int[]{current[0], x}, WEST)) {
-                        int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
-                        mazeItem.setSquareValue(current[0], current[1], value);
-
-                        incrementPickups(current[0], current[1]);
-                        Log.d("DEBUG", current[1] + " " + current[0]);
-                        return true;
-
-                    } else {
-                        mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
-                    }
-                }
-            }*/
-
             return false;
         }
     }
 
+    private void updatePathDirection(int[] current, int path_direction1, int path_direction2) {
+        int direction = NO_PATH;
+
+        if (path_direction1 == NORTH) {
+            switch (path_direction2) {
+                case NORTH:
+                    direction = VERT;
+                    break;
+                case EAST:
+                    direction = UP_RIGHT;
+                    break;
+                case WEST:
+                    direction = UP_LEFT;
+                    break;
+                default:
+                    direction = NO_PATH;
+                    break;
+            }
+
+        } else if (path_direction1 == SOUTH) {
+            switch (path_direction2) {
+                case SOUTH:
+                    direction = VERT;
+                    break;
+                case EAST:
+                    direction = DOWN_RIGHT;
+                    break;
+                case WEST:
+                    direction = DOWN_LEFT;
+                    break;
+                default:
+                    direction = NO_PATH;
+                    break;
+            }
+
+        } else if (path_direction1 == EAST) {
+            switch (path_direction2) {
+                case NORTH:
+                    direction = DOWN_LEFT;
+                    break;
+                case EAST:
+                    direction = HORZ;
+                    break;
+                case SOUTH:
+                    direction = UP_LEFT;
+                    break;
+                default:
+                    direction = NO_PATH;
+                    break;
+            }
+
+        } else if (path_direction1 == WEST) {
+            switch (path_direction2) {
+                case NORTH:
+                    direction = DOWN_RIGHT;
+                    break;
+                case SOUTH:
+                    direction = UP_RIGHT;
+                    break;
+                case WEST:
+                    direction = HORZ;
+                    break;
+                default:
+                    direction = NO_PATH;
+                    break;
+            }
+
+        }
+
+        mazeItem.setSquaresPathDirection(current[0], current[1], direction);
+    }
+
     private boolean checkNorth(int[] current, int previous) {
         // If not at the top edge, and did not just move South...
-        if (current[0]-1 >= 0 && previous != SOUTH) {
+        if (current[0] - 1 >= 0 && previous != SOUTH) {
 
             // Check North for Traversable Passage Way. If passage way is traversable...
-            if (mazeItem.getSquareValue(current[0]-1, current[1]) != WALL
-                    && mazeItem.getSquareValue(current[0]-1, current[1]) != POSSIBLE_PATH
-                    && mazeItem.getSquareValue(current[0]-1, current[1]) != START) {
+            if (mazeItem.getSquareValue(current[0] - 1, current[1]) != WALL
+                    && mazeItem.getSquareValue(current[0] - 1, current[1]) != POSSIBLE_PATH
+                    && mazeItem.getSquareValue(current[0] - 1, current[1]) != START) {
                 int y = current[0] - 1;
 
                 // Set Square Value to POSSIBLE_PATH
@@ -352,12 +323,16 @@ public class GridFragment extends Fragment {
                     int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
                     mazeItem.setSquareValue(current[0], current[1], value);
 
+                    // Set the direction of the path
+                    updatePathDirection(current, previous, NORTH);
+
                     incrementPickups(current[0], current[1]);
                     Log.d("DEBUG", current[1] + " " + current[0]);
                     return true;
 
                 } else {
                     mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
+                    updatePathDirection(current, NO_PATH, NO_PATH);
                 }
             }
         }
@@ -366,12 +341,12 @@ public class GridFragment extends Fragment {
     }
 
     private boolean checkSouth(int[] current, int previous) {
-        if (current[0]+1 < mazeItem.getHeight() && previous != NORTH) {
+        if (current[0] + 1 < mazeItem.getHeight() && previous != NORTH) {
 
             // Check South for Traversable Passage Way. If passage way is traversable...
-            if (mazeItem.getSquareValue(current[0]+1, current[1]) != WALL
-                    && mazeItem.getSquareValue(current[0]+1, current[1]) != POSSIBLE_PATH
-                    && mazeItem.getSquareValue(current[0]+1, current[1]) != START) {
+            if (mazeItem.getSquareValue(current[0] + 1, current[1]) != WALL
+                    && mazeItem.getSquareValue(current[0] + 1, current[1]) != POSSIBLE_PATH
+                    && mazeItem.getSquareValue(current[0] + 1, current[1]) != START) {
                 int y = current[0] + 1;
 
                 // Set Square Value to POSSIBLE_PATH
@@ -382,12 +357,16 @@ public class GridFragment extends Fragment {
                     int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
                     mazeItem.setSquareValue(current[0], current[1], value);
 
+                    // Set the direction of the path
+                    updatePathDirection(current, previous, SOUTH);
+
                     incrementPickups(current[0], current[1]);
                     Log.d("DEBUG", current[1] + " " + current[0]);
                     return true;
 
                 } else {
                     mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
+                    updatePathDirection(current, NO_PATH, NO_PATH);
                 }
             }
         }
@@ -397,12 +376,12 @@ public class GridFragment extends Fragment {
 
     private boolean checkEast(int[] current, int previous) {
         // If not at the right edge, and did not just move West...
-        if (current[1]+1 < mazeItem.getWidth() && previous != WEST) {
+        if (current[1] + 1 < mazeItem.getWidth() && previous != WEST) {
 
             // Check East for Traversable Passage Way. If passage way is traversable...
-            if (mazeItem.getSquareValue(current[0], current[1]+1) != WALL
-                    && mazeItem.getSquareValue(current[0], current[1]+1) != POSSIBLE_PATH
-                    && mazeItem.getSquareValue(current[0], current[1]+1) != START) {
+            if (mazeItem.getSquareValue(current[0], current[1] + 1) != WALL
+                    && mazeItem.getSquareValue(current[0], current[1] + 1) != POSSIBLE_PATH
+                    && mazeItem.getSquareValue(current[0], current[1] + 1) != START) {
                 int x = current[1] + 1;
 
                 // Set Square Value to POSSIBLE_PATH
@@ -413,12 +392,16 @@ public class GridFragment extends Fragment {
                     int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
                     mazeItem.setSquareValue(current[0], current[1], value);
 
+                    // Set the direction of the path
+                    updatePathDirection(current, previous, EAST);
+
                     incrementPickups(current[0], current[1]);
                     Log.d("DEBUG", current[1] + " " + current[0]);
                     return true;
 
                 } else {
                     mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
+                    updatePathDirection(current, NO_PATH, NO_PATH);
                 }
             }
         }
@@ -428,12 +411,12 @@ public class GridFragment extends Fragment {
 
     private boolean checkWest(int[] current, int previous) {
         // If not at the left edge, and did not just move East...
-        if (current[1]-1 >= 0 && previous != EAST) {
+        if (current[1] - 1 >= 0 && previous != EAST) {
 
             // Check West for Traversable Passage Way. If passage way is traversable...
-            if (mazeItem.getSquareValue(current[0], current[1]-1) != WALL
-                    && mazeItem.getSquareValue(current[0], current[1]-1) != POSSIBLE_PATH
-                    && mazeItem.getSquareValue(current[0], current[1]-1) != START) {
+            if (mazeItem.getSquareValue(current[0], current[1] - 1) != WALL
+                    && mazeItem.getSquareValue(current[0], current[1] - 1) != POSSIBLE_PATH
+                    && mazeItem.getSquareValue(current[0], current[1] - 1) != START) {
                 int x = current[1] - 1;
 
                 // Set Square Value to POSSIBLE_PATH
@@ -444,12 +427,17 @@ public class GridFragment extends Fragment {
                     int value = Arrays.equals(current, mazeItem.getStart()) ? START : PATH;
                     mazeItem.setSquareValue(current[0], current[1], value);
 
+                    // Set the direction of the path
+                    updatePathDirection(current, previous, WEST);
+
                     incrementPickups(current[0], current[1]);
                     Log.d("DEBUG", current[1] + " " + current[0]);
                     return true;
 
                 } else {
+                    // No path so remove Direction and set as TRAVERSABLE_PASSAGE_WAY
                     mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
+                    updatePathDirection(current, NO_PATH, NO_PATH);
                 }
             }
         }

@@ -32,7 +32,7 @@ public class MazeItem {
     }
 
     public void setSquareValue(int y, int x, int value) {
-        squares.get( MazeItem.getMazeSquareIndexWithCoord(y, x, width) ).setValue(value);
+        squares.get( getMazeSquareIndexWithCoord(y, x, width) ).setValue(value);
     }
 
     public static int getMazeSquareIndexWithCoord(int y, int x, int maze_width) {
@@ -58,5 +58,9 @@ public class MazeItem {
 
         squares.get(index).setPickup(true);
         return true;
+    }
+
+    public void setSquaresPathDirection(int y, int x, int direction) {
+        squares.get( getMazeSquareIndexWithCoord(y, x, width) ).setDirection(direction);
     }
 }
