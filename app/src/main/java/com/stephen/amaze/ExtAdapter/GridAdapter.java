@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.stephen.amaze.Models.MazeSquare;
@@ -42,8 +42,10 @@ public class GridAdapter extends ArrayAdapter<MazeSquare> {
                     R.layout.itemof_grid, parent, false);
 
             squareViewHolder = new SquareViewHolder();
-            squareViewHolder.outerColor = (RelativeLayout) convertView.findViewById(R.id.grid_outercolor);
-            squareViewHolder.innerColor = (RelativeLayout) convertView.findViewById(R.id.grid_innercolor);
+            squareViewHolder.outerColor = (RelativeLayout) convertView.findViewById(R.id.square_outercolor);
+            squareViewHolder.innerColor = (RelativeLayout) convertView.findViewById(R.id.square_innercolor);
+
+            squareViewHolder.directionView = (ImageView) convertView.findViewById(R.id.square_direction);
 
             convertView.setTag(squareViewHolder);
 
@@ -87,16 +89,21 @@ public class GridAdapter extends ArrayAdapter<MazeSquare> {
 
             squareViewHolder.outerColor.setBackgroundColor(outer_color);
             squareViewHolder.innerColor.setBackgroundColor(inner_color);
+
+            if (mazeSquare.isPickup()) {
+                squareViewHolder.outerColor.setBackgroundColor(activity.getColor(R.color.colorPrimary));
+            }
+
+            //squareViewHolder.directionView.setImageDrawable(activity.getDrawable(R.drawable.ic_action_cross));
+            //squareViewHolder.directionView.setScaleType(ImageView.ScaleType.FIT_XY);
         }
 
-        if (mazeSquare.isPickup()) {
-            squareViewHolder.outerColor.setBackgroundColor(activity.getColor(R.color.colorPrimary));
-        }
 
         return convertView;
     }
 
     static class SquareViewHolder {
         RelativeLayout outerColor, innerColor;
+        ImageView directionView;
     }
 }

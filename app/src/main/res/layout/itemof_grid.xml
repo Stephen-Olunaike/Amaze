@@ -5,13 +5,13 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/grid_outercolor"
+        android:id="@+id/square_outercolor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true">
 
         <RelativeLayout
-            android:id="@+id/grid_innercolor"
+            android:id="@+id/square_innercolor"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_centerInParent="true"
@@ -20,5 +20,13 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/square_direction"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/cross"
+        android:scaleType="centerCrop"/>
 
 </RelativeLayout>
