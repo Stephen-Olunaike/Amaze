@@ -1,5 +1,7 @@
 package com.stephen.amaze.Models;
 
+import android.graphics.drawable.Drawable;
+
 public class MazeSquare {
 
     public static final int TRAVERSABLE_PASSAGE_WAY = 0;
@@ -10,24 +12,28 @@ public class MazeSquare {
     public static final int POSSIBLE_PATH = 5;
 
     public static final int NO_PATH = 0;
-    public static final int VERT = 1;
+    /*public static final int VERT = 1;
     public static final int HORZ = 2;
     public static final int UP_RIGHT = 3;
     public static final int UP_LEFT  = 4;
     public static final int DOWN_RIGHT = 5;
-    public static final int DOWN_LEFT = 6;
+    public static final int DOWN_LEFT = 6;*/
 
     private int index;
     private int value;
     private boolean pickup;
 
-    private int direction;
+    private int fromDirection, toDirection;
+
+    private Drawable directionDrawable;
 
     public MazeSquare(int index, int value) {
         this.index = index;
         this.value = value;
         this.pickup = false;
-        this.direction = NO_PATH;
+        this.fromDirection = NO_PATH;
+        this.toDirection = NO_PATH;
+        this.directionDrawable = null;
     }
 
     public int getIndex() {
@@ -50,11 +56,27 @@ public class MazeSquare {
         this.pickup = pickup;
     }
 
-    public int getDirection() {
-        return direction;
+    public int getFromDirection() {
+        return fromDirection;
     }
 
-    public void setDirection(int direction) {
-        this.direction = direction;
+    public int getToDirection() {
+        return toDirection;
+    }
+
+    public void setFromDirection(int fromDirection) {
+        this.fromDirection = fromDirection;
+    }
+
+    public void setToDirection(int toDirection) {
+        this.toDirection = toDirection;
+    }
+
+    public Drawable getDirectionDrawable() {
+        return directionDrawable;
+    }
+
+    public void setDirectionDrawable(Drawable directionDrawable) {
+        this.directionDrawable = directionDrawable;
     }
 }

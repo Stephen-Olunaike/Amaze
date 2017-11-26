@@ -66,6 +66,7 @@ public class GridAdapter extends ArrayAdapter<MazeSquare> {
 
                 case MazeSquare.WALL :
                     outer_color = activity.getColor(R.color.black);
+                    if (mazeSquare.isPickup()) valueImage = activity.getDrawable(R.drawable.pick_up);
                     break;
 
                 case MazeSquare.START : case MazeSquare.END :
@@ -90,38 +91,7 @@ public class GridAdapter extends ArrayAdapter<MazeSquare> {
             squareViewHolder.outerColor.setBackgroundColor(outer_color);
 
             // check direction
-            Drawable directionImage;
-
-            switch (mazeSquare.getDirection()) {
-
-                case MazeSquare.VERT :
-                    directionImage = activity.getDrawable(R.drawable.vert);
-                    break;
-
-                case MazeSquare.HORZ :
-                    directionImage = activity.getDrawable(R.drawable.horz);
-                    break;
-
-                case MazeSquare.UP_LEFT :
-                    directionImage = activity.getDrawable(R.drawable.up_left);
-                    break;
-
-                case MazeSquare.UP_RIGHT :
-                    directionImage = activity.getDrawable(R.drawable.up_right);
-                    break;
-
-                case MazeSquare.DOWN_LEFT :
-                    directionImage = activity.getDrawable(R.drawable.down_left);
-                    break;
-
-                case MazeSquare.DOWN_RIGHT :
-                    directionImage = activity.getDrawable(R.drawable.down_right);
-                    break;
-
-                default:
-                    directionImage = null;
-                    break;
-            }
+            Drawable directionImage = mazeSquare.getDirectionDrawable();
 
             squareViewHolder.directionView.setImageResource(0);
             if (directionImage != null) squareViewHolder.directionView.setImageDrawable(directionImage);

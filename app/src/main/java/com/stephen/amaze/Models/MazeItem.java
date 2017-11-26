@@ -1,5 +1,7 @@
 package com.stephen.amaze.Models;
 
+import android.graphics.drawable.Drawable;
+
 import java.util.ArrayList;
 
 public class MazeItem {
@@ -60,7 +62,20 @@ public class MazeItem {
         return true;
     }
 
-    public void setSquaresPathDirection(int y, int x, int direction) {
-        squares.get( getMazeSquareIndexWithCoord(y, x, width) ).setDirection(direction);
+    public void setSquaresFromDirection(int y, int x, int direction) {
+        squares.get( getMazeSquareIndexWithCoord(y, x, width) ).setFromDirection(direction);
+    }
+    public void setSquaresToDirection(int y, int x, int direction) {
+        squares.get( getMazeSquareIndexWithCoord(y, x, width) ).setToDirection(direction);
+    }
+    public void setSquaresPathDirection(int i, Drawable direction) {
+        squares.get(i).setDirectionDrawable(direction);
+    }
+
+    public void setSquaresFromDirection(int i, int direction) {
+        squares.get(i).setFromDirection(direction);
+    }
+    public void setSquaresToDirection(int i, int direction) {
+        squares.get(i).setToDirection(direction);
     }
 }

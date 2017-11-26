@@ -1,6 +1,7 @@
 package com.stephen.amaze.ViewControllers;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -21,18 +22,12 @@ import com.stephen.amaze.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.stephen.amaze.Models.MazeSquare.DOWN_LEFT;
-import static com.stephen.amaze.Models.MazeSquare.DOWN_RIGHT;
 import static com.stephen.amaze.Models.MazeSquare.END;
-import static com.stephen.amaze.Models.MazeSquare.HORZ;
 import static com.stephen.amaze.Models.MazeSquare.NO_PATH;
 import static com.stephen.amaze.Models.MazeSquare.PATH;
 import static com.stephen.amaze.Models.MazeSquare.POSSIBLE_PATH;
 import static com.stephen.amaze.Models.MazeSquare.START;
 import static com.stephen.amaze.Models.MazeSquare.TRAVERSABLE_PASSAGE_WAY;
-import static com.stephen.amaze.Models.MazeSquare.UP_LEFT;
-import static com.stephen.amaze.Models.MazeSquare.UP_RIGHT;
-import static com.stephen.amaze.Models.MazeSquare.VERT;
 import static com.stephen.amaze.Models.MazeSquare.WALL;
 
 /**
@@ -116,6 +111,8 @@ public class GridFragment extends Fragment {
 
         plotPath(mazeItem.getStart(), 0);
         pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
+        calculatePathDirectionForEachSquare();
+
         wallsText.setText(Integer.toString(walls));
 
         adapter = new GridAdapter(getActivity(), squares);
@@ -143,14 +140,12 @@ public class GridFragment extends Fragment {
                     walls++;
                     wallsText.setText(Integer.toString(walls));
 
-                    for (MazeSquare s : squares)
-                        if (s.getValue() == PATH) s.setValue(TRAVERSABLE_PASSAGE_WAY);
-
+                    clearSquares();
                     pickups = 0;
                     plotPath(mazeItem.getStart(), 0);
                     pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
+                    calculatePathDirectionForEachSquare();
 
-                    adapter.notifyDataSetChanged();
                 } else if (adapter.getItem(i).getValue() != END
                         && adapter.getItem(i).getValue() != START
                         && adapter.getItem(i).getValue() != TRAVERSABLE_PASSAGE_WAY) {
@@ -159,26 +154,17 @@ public class GridFragment extends Fragment {
                     walls--;
                     wallsText.setText(Integer.toString(walls));
 
-                    for (MazeSquare s : squares)
-                        if (s.getValue() == PATH) s.setValue(TRAVERSABLE_PASSAGE_WAY);
-
+                    clearSquares();
                     pickups = 0;
                     plotPath(mazeItem.getStart(), 0);
                     pickupsText.setText(Integer.toString(pickups) + "/" + maze.getNumberOfPickups());
+                    calculatePathDirectionForEachSquare();
 
-                    adapter.notifyDataSetChanged();
                 }
+
+                adapter.notifyDataSetChanged();
             }
         });
-
-        /*gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-
-                return true;
-            }
-        });*/
 
         return v;
     }
@@ -188,6 +174,128 @@ public class GridFragment extends Fragment {
         int index = MazeItem.getMazeSquareIndexWithCoord(y, x, mazeItem.getWidth());
 
         if (squares.get(index).isPickup()) pickups++;
+    }
+
+    private void clearSquares() {
+        for (int i=0; i<mazeItem.getSquares().size(); i++) {
+
+            if (mazeItem.getSquares().get(i).getValue() == PATH)
+                mazeItem.getSquares().get(i).setValue(TRAVERSABLE_PASSAGE_WAY);
+
+            mazeItem.setSquaresToDirection(i, NO_PATH);
+            mazeItem.setSquaresFromDirection(i, NO_PATH);
+            mazeItem.setSquaresPathDirection(i, null);
+        }
+    }
+
+    private void calculatePathDirectionForEachSquare() {
+
+        for (int i = 0; i<mazeItem.getSquares().size(); i++) {
+
+            Drawable direction = null;
+
+            int from = mazeItem.getSquares().get(i).getFromDirection();
+            int to = mazeItem.getSquares().get(i).getToDirection();
+
+            if (from == NORTH) {
+                switch (to) {
+                    case NORTH:
+                        direction = getActivity().getDrawable(R.drawable.vert);
+                        break;
+                    case EAST:
+                        direction = getActivity().getDrawable(R.drawable.up_right);
+                        break;
+                    case WEST:
+                        direction = getActivity().getDrawable(R.drawable.up_left);
+                        break;
+                    case NO_PATH:
+                        direction = getActivity().getDrawable(R.drawable.up);
+                        break;
+                    default:
+                        direction = null;
+                        break;
+                }
+
+            } else if (from == SOUTH) {
+                switch (to) {
+                    case SOUTH:
+                        direction = getActivity().getDrawable(R.drawable.vert);
+                        break;
+                    case EAST:
+                        direction = getActivity().getDrawable(R.drawable.down_right);
+                        break;
+                    case WEST:
+                        direction = getActivity().getDrawable(R.drawable.down_left);
+                        break;
+                    case NO_PATH:
+                        direction = getActivity().getDrawable(R.drawable.down);
+                        break;
+                    default:
+                        direction = null;
+                        break;
+                }
+
+            } else if (from == EAST) {
+                switch (to) {
+                    case NORTH:
+                        direction = getActivity().getDrawable(R.drawable.down_left);
+                        break;
+                    case EAST:
+                        direction = getActivity().getDrawable(R.drawable.horz);
+                        break;
+                    case SOUTH:
+                        direction = getActivity().getDrawable(R.drawable.up_left);
+                        break;
+                    case NO_PATH:
+                        direction = getActivity().getDrawable(R.drawable.right);
+                        break;
+                    default:
+                        direction = null;
+                        break;
+                }
+
+            } else if (from == WEST) {
+                switch (to) {
+                    case NORTH:
+                        direction = getActivity().getDrawable(R.drawable.down_right);
+                        break;
+                    case SOUTH:
+                        direction = getActivity().getDrawable(R.drawable.up_right);
+                        break;
+                    case WEST:
+                        direction = getActivity().getDrawable(R.drawable.horz);
+                        break;
+                    case NO_PATH:
+                        direction = getActivity().getDrawable(R.drawable.left);
+                        break;
+                    default:
+                        direction = null;
+                        break;
+                }
+
+            } else if (from == NO_PATH) {
+                switch (to) {
+                    case NORTH:
+                        direction = getActivity().getDrawable(R.drawable.down);
+                        break;
+                    case SOUTH:
+                        direction = getActivity().getDrawable(R.drawable.up);
+                        break;
+                    case EAST:
+                        direction = getActivity().getDrawable(R.drawable.right);
+                        break;
+                    case WEST:
+                        direction = getActivity().getDrawable(R.drawable.left);
+                        break;
+                    default:
+                        direction = null;
+                        break;
+                }
+
+            }
+
+            mazeItem.setSquaresPathDirection(i, direction);
+        }
     }
 
     private static final int NORTH = 1;
@@ -203,7 +311,8 @@ public class GridFragment extends Fragment {
             mazeItem.setSquareValue(current[0], current[1], END);
 
             // Set the direction of the path
-            updatePathDirection(current, previous, NO_PATH);
+            mazeItem.setSquaresFromDirection(current[0], current[1], previous);
+            mazeItem.setSquaresToDirection(current[0], current[1], NO_PATH);
 
             incrementPickups(current[0], current[1]);
             Log.d("DEBUG", current[1] + " " + current[0]);
@@ -233,77 +342,7 @@ public class GridFragment extends Fragment {
         }
     }
 
-    private void updatePathDirection(int[] current, int path_direction1, int path_direction2) {
-        int direction = NO_PATH;
 
-        if (path_direction1 == NORTH) {
-            switch (path_direction2) {
-                case NORTH:
-                    direction = VERT;
-                    break;
-                case EAST:
-                    direction = UP_RIGHT;
-                    break;
-                case WEST:
-                    direction = UP_LEFT;
-                    break;
-                default:
-                    direction = NO_PATH;
-                    break;
-            }
-
-        } else if (path_direction1 == SOUTH) {
-            switch (path_direction2) {
-                case SOUTH:
-                    direction = VERT;
-                    break;
-                case EAST:
-                    direction = DOWN_RIGHT;
-                    break;
-                case WEST:
-                    direction = DOWN_LEFT;
-                    break;
-                default:
-                    direction = NO_PATH;
-                    break;
-            }
-
-        } else if (path_direction1 == EAST) {
-            switch (path_direction2) {
-                case NORTH:
-                    direction = DOWN_LEFT;
-                    break;
-                case EAST:
-                    direction = HORZ;
-                    break;
-                case SOUTH:
-                    direction = UP_LEFT;
-                    break;
-                default:
-                    direction = NO_PATH;
-                    break;
-            }
-
-        } else if (path_direction1 == WEST) {
-            switch (path_direction2) {
-                case NORTH:
-                    direction = DOWN_RIGHT;
-                    break;
-                case SOUTH:
-                    direction = UP_RIGHT;
-                    break;
-                case WEST:
-                    direction = HORZ;
-                    break;
-                default:
-                    direction = NO_PATH;
-                    break;
-            }
-
-        }
-
-        mazeItem.setSquaresPathDirection(current[0], current[1], direction);
-    }
 
     private boolean checkNorth(int[] current, int previous) {
         // If not at the top edge, and did not just move South...
@@ -324,7 +363,8 @@ public class GridFragment extends Fragment {
                     mazeItem.setSquareValue(current[0], current[1], value);
 
                     // Set the direction of the path
-                    updatePathDirection(current, previous, NORTH);
+                    mazeItem.setSquaresFromDirection(current[0], current[1], previous);
+                    mazeItem.setSquaresToDirection(current[0], current[1], NORTH);
 
                     incrementPickups(current[0], current[1]);
                     Log.d("DEBUG", current[1] + " " + current[0]);
@@ -332,7 +372,8 @@ public class GridFragment extends Fragment {
 
                 } else {
                     mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
-                    updatePathDirection(current, NO_PATH, NO_PATH);
+                    mazeItem.setSquaresFromDirection(current[0], current[1], NO_PATH);
+                    mazeItem.setSquaresToDirection(current[0], current[1], NO_PATH);
                 }
             }
         }
@@ -358,7 +399,8 @@ public class GridFragment extends Fragment {
                     mazeItem.setSquareValue(current[0], current[1], value);
 
                     // Set the direction of the path
-                    updatePathDirection(current, previous, SOUTH);
+                    mazeItem.setSquaresFromDirection(current[0], current[1], previous);
+                    mazeItem.setSquaresToDirection(current[0], current[1], SOUTH);
 
                     incrementPickups(current[0], current[1]);
                     Log.d("DEBUG", current[1] + " " + current[0]);
@@ -366,7 +408,8 @@ public class GridFragment extends Fragment {
 
                 } else {
                     mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
-                    updatePathDirection(current, NO_PATH, NO_PATH);
+                    mazeItem.setSquaresFromDirection(current[0], current[1], NO_PATH);
+                    mazeItem.setSquaresToDirection(current[0], current[1], NO_PATH);
                 }
             }
         }
@@ -393,7 +436,8 @@ public class GridFragment extends Fragment {
                     mazeItem.setSquareValue(current[0], current[1], value);
 
                     // Set the direction of the path
-                    updatePathDirection(current, previous, EAST);
+                    mazeItem.setSquaresFromDirection(current[0], current[1], previous);
+                    mazeItem.setSquaresToDirection(current[0], current[1], EAST);
 
                     incrementPickups(current[0], current[1]);
                     Log.d("DEBUG", current[1] + " " + current[0]);
@@ -401,7 +445,8 @@ public class GridFragment extends Fragment {
 
                 } else {
                     mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
-                    updatePathDirection(current, NO_PATH, NO_PATH);
+                    mazeItem.setSquaresFromDirection(current[0], current[1], NO_PATH);
+                    mazeItem.setSquaresToDirection(current[0], current[1], NO_PATH);
                 }
             }
         }
@@ -428,7 +473,8 @@ public class GridFragment extends Fragment {
                     mazeItem.setSquareValue(current[0], current[1], value);
 
                     // Set the direction of the path
-                    updatePathDirection(current, previous, WEST);
+                    mazeItem.setSquaresFromDirection(current[0], current[1], previous);
+                    mazeItem.setSquaresToDirection(current[0], current[1], WEST);
 
                     incrementPickups(current[0], current[1]);
                     Log.d("DEBUG", current[1] + " " + current[0]);
@@ -437,7 +483,8 @@ public class GridFragment extends Fragment {
                 } else {
                     // No path so remove Direction and set as TRAVERSABLE_PASSAGE_WAY
                     mazeItem.setSquareValue(current[0], current[1], TRAVERSABLE_PASSAGE_WAY);
-                    updatePathDirection(current, NO_PATH, NO_PATH);
+                    mazeItem.setSquaresFromDirection(current[0], current[1], NO_PATH);
+                    mazeItem.setSquaresToDirection(current[0], current[1], NO_PATH);
                 }
             }
         }
