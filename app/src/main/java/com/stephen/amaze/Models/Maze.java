@@ -73,7 +73,7 @@ public class Maze {
 
     private int generatePickUps(int maxcount) {
 
-        int total_pickups = 1;//new Random().nextInt(maxcount) + 1;
+        int total_pickups = 2;//new Random().nextInt(maxcount) + 1;
 
         int count = total_pickups;
 
