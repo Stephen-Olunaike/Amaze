@@ -1,6 +1,7 @@
 package com.stephen.amaze.ExtAdapter;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -43,9 +44,9 @@ public class GridAdapter extends ArrayAdapter<MazeSquare> {
 
             squareViewHolder = new SquareViewHolder();
             squareViewHolder.outerColor = (RelativeLayout) convertView.findViewById(R.id.square_outercolor);
-            squareViewHolder.innerColor = (RelativeLayout) convertView.findViewById(R.id.square_innercolor);
 
             squareViewHolder.directionView = (ImageView) convertView.findViewById(R.id.square_direction);
+            squareViewHolder.valueView = (ImageView) convertView.findViewById(R.id.square_value);
 
             convertView.setTag(squareViewHolder);
 
@@ -57,53 +58,54 @@ public class GridAdapter extends ArrayAdapter<MazeSquare> {
 
         if (squareViewHolder != null) {
 
-            int outer_color, inner_color;
+            int outer_color = activity.getColor(R.color.white);
+            Drawable image = null, valueImage = null;
 
             switch (mazeSquare.getValue()) {
 
                 case MazeSquare.WALL :
                     outer_color = activity.getColor(R.color.black);
-                    inner_color = activity.getColor(R.color.black);
                     break;
 
                 case MazeSquare.START :
-                    outer_color = activity.getColor(R.color.white);
-                    inner_color = activity.getColor(R.color.colorPrimaryDark);
+                    image = activity.getDrawable(R.drawable.cross);
+                    valueImage = activity.getDrawable(R.drawable.point);
                     break;
 
                 case MazeSquare.END :
-                    outer_color = activity.getColor(R.color.white);
-                    inner_color = activity.getColor(R.color.colorPrimaryDark);
+                    image = activity.getDrawable(R.drawable.cross);
+                    valueImage = activity.getDrawable(R.drawable.point);
                     break;
 
                 case MazeSquare.PATH :
-                    outer_color = activity.getColor(R.color.white);
-                    inner_color = activity.getColor(R.color.colorAccent);
+                    image = activity.getDrawable(R.drawable.cross);
                     break;
 
                 default:
                     outer_color = activity.getColor(R.color.white);
-                    inner_color = activity.getColor(R.color.white);
+                    image = null;
+                    valueImage = null;
                     break;
             }
 
+            squareViewHolder.directionView.setImageResource(0);
+            if (image != null) squareViewHolder.directionView.setImageDrawable(image);
+
+            squareViewHolder.valueView.setImageResource(0);
+            if (valueImage != null) squareViewHolder.valueView.setImageDrawable(valueImage);
+
             squareViewHolder.outerColor.setBackgroundColor(outer_color);
-            squareViewHolder.innerColor.setBackgroundColor(inner_color);
 
             if (mazeSquare.isPickup()) {
                 squareViewHolder.outerColor.setBackgroundColor(activity.getColor(R.color.colorPrimary));
             }
-
-            //squareViewHolder.directionView.setImageDrawable(activity.getDrawable(R.drawable.ic_action_cross));
-            //squareViewHolder.directionView.setScaleType(ImageView.ScaleType.FIT_XY);
         }
-
 
         return convertView;
     }
 
     static class SquareViewHolder {
-        RelativeLayout outerColor, innerColor;
-        ImageView directionView;
+        RelativeLayout outerColor;
+        ImageView directionView, valueView;
     }
 }
