@@ -7,13 +7,20 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:padding="@dimen/universal_ten">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
-            android:textSize="@dimen/small"
+            android:textSize="@dimen/text_small"
             android:text="@string/pick_ups"
             />
         <TextView
@@ -21,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            android:textSize="@dimen/small"
+            android:textSize="@dimen/text_small"
             android:text="0"
             />
 
@@ -29,14 +36,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
-            android:textSize="@dimen/small"
+            android:textSize="@dimen/text_small"
             android:text="@string/walls"
             />
         <TextView
             android:id="@+id/grid_walls"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/small"
+            android:textSize="@dimen/text_small"
             android:text="0"
             />
 
@@ -63,8 +70,8 @@
             android:clickable="true">
 
             <ProgressBar
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/universal_forty"
+                android:layout_height="@dimen/universal_forty"
                 android:layout_gravity="center"/>
 
         </FrameLayout>
@@ -75,7 +82,7 @@
         android:id="@+id/grid_refreshbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="@dimen/universal_fifteen"
         android:background="@null"
         android:layout_gravity="end"
         android:src="@drawable/ic_action_refresh"/>

@@ -22,15 +22,15 @@
         <ImageView
             android:id="@+id/square_direction"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="@dimen/universal_eighty"
             android:layout_centerInParent="true"
             android:scaleType="centerCrop"/>
 
         <ImageView
             android:id="@+id/square_value"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:padding="5dp"
+            android:layout_height="@dimen/universal_fifty"
+            android:padding="@dimen/universal_five"
             android:layout_centerInParent="true"
             android:scaleType="centerInside"/>
 
