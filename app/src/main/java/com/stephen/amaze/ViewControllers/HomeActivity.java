@@ -9,10 +9,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 
 import com.stephen.amaze.R;
 
 public class HomeActivity extends AppCompatActivity implements GridFragment.OnFragmentInteractionListener {
+
+    private FrameLayout helpLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +36,33 @@ public class HomeActivity extends AppCompatActivity implements GridFragment.OnFr
             }
         });*/
 
+        helpLayout = (FrameLayout) findViewById(R.id.home_helplayout);
+        ImageButton helpButton = (ImageButton) findViewById(R.id.home_helpbutton);
+        Button okButton = (Button) findViewById(R.id.home_okbutton);
+
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showOrHideHelpLayout();
+            }
+        });
+
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showOrHideHelpLayout();
+            }
+        });
+
         showGridFragment();
+    }
+
+    private void showOrHideHelpLayout() {
+        if (helpLayout.getVisibility() == View.VISIBLE) {
+            helpLayout.setVisibility(View.INVISIBLE);
+        } else {
+            helpLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     private void showGridFragment() {

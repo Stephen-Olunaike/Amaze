@@ -8,5 +8,14 @@
     <string name="pick_ups">Pick Ups</string>
     <string name="walls">Walls</string>
     <string name="equals">=</string>
+    <string name="help_text">Use walls to force the line to pass\nthrough squares with pick ups</string>
+
+    <string name="line">Line</string>
+    <string name="pickup_outside">Pick Up Outside Line</string>
+    <string name="pickup_inside">Pick Up Inside Line</string>
+    <string name="startend_point">Start/End Point</string>
+    <string name="wall">Wall</string>
+
+    <string name="ok">OK</string>
 
 </resources>

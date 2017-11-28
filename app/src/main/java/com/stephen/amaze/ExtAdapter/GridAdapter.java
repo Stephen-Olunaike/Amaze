@@ -65,7 +65,7 @@ public class GridAdapter extends ArrayAdapter<MazeSquare> {
             switch (mazeSquare.getValue()) {
 
                 case MazeSquare.WALL :
-                    outer_color = activity.getColor(R.color.black);
+                    outer_color = activity.getColor(R.color.colorPrimary);
                     if (mazeSquare.isPickup()) valueImage = activity.getDrawable(R.drawable.pick_up);
                     break;
 
